@@ -1,4 +1,3 @@
-# scripts/gen_cert.py
 import os, sys, datetime
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa

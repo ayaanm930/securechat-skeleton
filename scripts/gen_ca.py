@@ -1,4 +1,3 @@
-# scripts/gen_ca.py
 import os, datetime
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa

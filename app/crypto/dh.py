@@ -1,7 +1,6 @@
 # app/crypto/dh.py
 import os, hashlib
 
-# Use a 2048-bit safe prime (RFC 3526-like). For assignment/testing use fixed prime.
 P_HEX = (
     "FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E08"
     "8A67CC74020BBEA63B139B22514A08798E3404DD"
