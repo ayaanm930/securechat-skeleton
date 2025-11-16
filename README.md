@@ -233,12 +233,6 @@ Below are exact reproduction steps.
 
 Start capture BEFORE running client:
 
-### Linux:
-
-```bash
-sudo tcpdump -i lo -s 0 -w securechat.pcap port 9000
-```
-
 ### Windows:
 
 Use Wireshark
@@ -257,14 +251,7 @@ It must show:
 
 # 🚫 Test 2 — BAD_CERT (Invalid Certificate)
 
-Replace client certificate with garbage:
-
-```powershell
-mv certs/client.cert.pem certs/client.cert.pem.bak
-echo "garbage" > certs/client.cert.pem
-python app/client.py
-```
-
+Change client certificate name and add a empty on with original name OR replace client certificatewith ca certifcate
 Client should receive:
 
 ```
