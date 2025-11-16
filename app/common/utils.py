@@ -1,9 +1,15 @@
-"""Helper signatures: now_ms, b64e, b64d, sha256_hex."""
+import base64, hashlib, time
+from typing import Union
 
-def now_ms(): raise NotImplementedError
+def b64e(b: bytes) -> str:
+    return base64.b64encode(b).decode()
 
-def b64e(b: bytes): raise NotImplementedError
+def b64d(s: str) -> bytes:
+    return base64.b64decode(s.encode())
 
-def b64d(s: str): raise NotImplementedError
+def now_ms() -> int:
+    return int(time.time() * 1000)
 
-def sha256_hex(data: bytes): raise NotImplementedError
+def sha256_hex(data: Union[bytes, str]) -> str:
+    if isinstance(data, str): data = data.encode()
+    return hashlib.sha256(data).hexdigest()
