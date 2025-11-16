@@ -1,4 +1,15 @@
-__pycache__/
+# keys and certs
+certs/*.key.pem
+certs/*.key
+certs/*.pfx
+
+# local runtime
+.env
 venv/
-certs/
+__pycache__/
+*.pyc
+
+# transcripts / evidence
+transcripts/
+
 tester.py
