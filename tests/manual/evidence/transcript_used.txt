@@ -1,0 +1,5 @@
+receipt: {'type': 'receipt',
+ 'first_seq': 1, 
+ 'last_seq': 6, 
+ 'transcript_sha256': '219394a702916ac61e2f788d5815c5cabb535e34184b6e06f85d1bebbff256d8', 
+ 'sig_b64': 'OpD6C+dGUXXNpaZ48ZOg+fW0Qhwgy6uadcfMTEMpJqDu17JhU0QBd0XZyitvewhJYNONO5Xr4lv1QlKLoslveTuCJFICoVIqtzQHS1fuarzB0nedRxKIzMHJTUQRl40kxzF0xTG7W8eanlzLthKIgNiABia3QoDhS0iSdnqcY5WaJiUWfs1N8sze3rjvq063FqmjEnoYgetOzJJ6PH7bXK4HkF+Ca/OaaafNS9lLwNEkZpSxYjwH+pmR7QcZKSIYTn8TJf9FrMHe8pmbeh00M/HsWcIsWMwc9dfs0KStCW6uN8cvXqu2xCvvH9bI4Q+1s+/WyZu0Mxk0mR6YQtlrOw=='}
