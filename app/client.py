@@ -22,6 +22,12 @@ CLIENT_CERT = os.path.join(CERT_DIR, "client.cert.pem")
 CLIENT_KEY = os.path.join(CERT_DIR, "client.key.pem")
 SERVER_CERT = os.path.join(CERT_DIR, "server.cert.pem")
 
+
+
+#TESTING FLAGS
+TEST_REPLAY = False  # <--- set to True only during test
+TEST_SIG_FAIL = False   # <--- set to True only during test
+
 def send_frame(conn, obj):
     raw = json.dumps(obj).encode()
     conn.sendall(len(raw).to_bytes(4, "big") + raw)
@@ -135,18 +141,35 @@ def client_flow(server_host="127.0.0.1", server_port=9000):
 
             ts = now_ms()
             ct = encrypt_aes128_ecb(chat_key, txt.encode())
-            ct_b64 = base64.b64encode(ct).decode()
-            concat = str(seq).encode() + str(ts).encode() + base64.b64decode(ct_b64)
+            orig_ct = ct[:]        # save original ciphertext (bytes)
+
+            # compute signature on original ciphertext
+            concat = str(seq).encode() + str(ts).encode() + orig_ct
             hmsg = hashlib.sha256(concat).digest()
             try:
                 sig = base64.b64encode(client_priv.sign(hmsg, padding.PKCS1v15(), hashes.SHA256())).decode()
+
+                # if testing SIG_FAIL → tamper AFTER signing
+                if TEST_SIG_FAIL:
+                    ct = bytearray(ct)
+                    ct[0] ^= 0x01      # flip 1 bit
+                    ct = bytes(ct)
+
+                ct_b64 = base64.b64encode(ct).decode()
+
             except Exception as e:
                 print("sign failed:", e); break
             send_frame(s, {"type":"msg","seqno": seq, "ts": ts, "ct_b64": ct_b64, "sig_b64": sig})
 
             reply = recv_frame(s)
             print("reply:", reply)
-            seq += 2
+            
+            if TEST_REPLAY:
+                if seq > 1:
+                    seq = 1
+            else:
+                seq += 2
+
 
     except KeyboardInterrupt:
         print("Interrupted by user")
