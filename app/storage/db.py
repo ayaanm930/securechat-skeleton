@@ -1,11 +1,13 @@
 import os, pymysql
 
-MYSQL_HOST = os.getenv("MYSQL_HOST", "127.0.0.1")
-MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
-MYSQL_USER = os.getenv("MYSQL_USER", "securechat")
-MYSQL_PASS = os.getenv("MYSQL_PASS", "example_pass")
-MYSQL_DB   = os.getenv("MYSQL_DB", "securechat")
+from dotenv import load_dotenv
 
+load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
+MYSQL_HOST = os.getenv("MYSQL_HOST")
+MYSQL_PORT = int(os.getenv("MYSQL_PORT"))
+MYSQL_USER = os.getenv("MYSQL_USER")
+MYSQL_PASS = os.getenv("MYSQL_PASS")
+MYSQL_DB   = os.getenv("MYSQL_DB")
 def connect():
     return pymysql.connect(host=MYSQL_HOST, port=MYSQL_PORT, user=MYSQL_USER,
                            password=MYSQL_PASS, db=MYSQL_DB, autocommit=True)

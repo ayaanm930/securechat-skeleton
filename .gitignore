@@ -1,10 +1,8 @@
 # keys and certs
-certs/*.key.pem
-certs/*.key
-certs/*.pfx
-
+certs/
 # local runtime
 .env
+
 venv/
 __pycache__/
 *.pyc
