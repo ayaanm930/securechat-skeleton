@@ -32,7 +32,6 @@ def admin_shutdown_listener():
             print("Shutting down server...")
             SHUTDOWN = True
             break
-# ---------------------------
 
 def send_frame(conn, obj):
     raw = json.dumps(obj).encode()

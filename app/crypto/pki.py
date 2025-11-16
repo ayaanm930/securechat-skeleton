@@ -1,12 +1,3 @@
-# app/crypto/pki.py
-"""
-X.509 validation helper.
-
-- Uses not_valid_before_utc / not_valid_after_utc when available (avoids deprecation warnings).
-- Handles comparisons between naive and aware datetimes by making `now` match the cert's tz-awareness.
-- Verifies issuer equals CA subject and certificate signature using CA public key.
-"""
-
 import os
 import warnings
 from datetime import datetime, timezone
@@ -14,7 +5,6 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding as asymp
 
-# suppress deprecation warnings originating inside cryptography when older properties are accessed
 from cryptography.utils import CryptographyDeprecationWarning
 warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
 
@@ -28,10 +18,9 @@ def load_ca_cert(path: str = None):
 
 
 def _get_not_valid_before(cert: x509.Certificate):
-    # Prefer the newer UTC-aware property if available
     if hasattr(cert, "not_valid_before_utc"):
         return cert.not_valid_before_utc
-    # fallback (might be deprecated for some versions)
+    # fallback
     return cert.not_valid_before
 
 
@@ -42,16 +31,6 @@ def _get_not_valid_after(cert: x509.Certificate):
 
 
 def validate_cert(pem_bytes: bytes, ca_cert=None) -> bool:
-    """
-    Validate an X.509 PEM certificate against the local CA:
-
-    - parse PEM
-    - check issuer equals CA subject
-    - check validity window (uses timezone-aware comparison if cert provides UTC-aware datetimes)
-    - verify signature with CA public key
-
-    Returns True if certificate is valid, False otherwise.
-    """
     try:
         cert = x509.load_pem_x509_certificate(pem_bytes)
     except Exception:

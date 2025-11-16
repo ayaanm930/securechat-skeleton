@@ -68,7 +68,7 @@ def client_flow(server_host="127.0.0.1", server_port=9000):
     if not validate_cert(server_cert_pem.encode()):
         print("server cert invalid"); s.close(); return
 
-    # initial DH
+    #initial DH
     a = generate_private(); A = public_from_private(a)
     send_frame(s, {"type":"dh_client", "g": str(G), "p": str(P), "A": str(A)})
     srv = recv_frame(s)
@@ -93,7 +93,7 @@ def client_flow(server_host="127.0.0.1", server_port=9000):
         print("server:", resp)
         s.close(); print("registration done; restart client to login"); return
 
-    # LOGIN flow (challenge-response)
+    #LOGIN flow (challenge-response)
     email = input("email> ").strip()
     pwd = input("password> ").encode()
     payload = {"type":"login_request", "email": email}
@@ -113,7 +113,7 @@ def client_flow(server_host="127.0.0.1", server_port=9000):
     if not resp2 or resp2.get("type") == "err":
         s.close(); return
 
-    # post-auth DH for chat
+    #post-auth DH for chat
     a2 = generate_private(); A2 = public_from_private(a2)
     send_frame(s, {"type":"dh_client", "g": str(G), "p": str(P), "A": str(A2)})
     srv2 = recv_frame(s)
@@ -141,15 +141,14 @@ def client_flow(server_host="127.0.0.1", server_port=9000):
 
             ts = now_ms()
             ct = encrypt_aes128_ecb(chat_key, txt.encode())
-            orig_ct = ct[:]        # save original ciphertext (bytes)
+            orig_ct = ct[:]
 
-            # compute signature on original ciphertext
             concat = str(seq).encode() + str(ts).encode() + orig_ct
             hmsg = hashlib.sha256(concat).digest()
             try:
                 sig = base64.b64encode(client_priv.sign(hmsg, padding.PKCS1v15(), hashes.SHA256())).decode()
 
-                # if testing SIG_FAIL → tamper AFTER signing
+                #SIG_FAIL → tamper AFTER signing
                 if TEST_SIG_FAIL:
                     ct = bytearray(ct)
                     ct[0] ^= 0x01      # flip 1 bit
@@ -164,7 +163,7 @@ def client_flow(server_host="127.0.0.1", server_port=9000):
             reply = recv_frame(s)
             print("reply:", reply)
             
-            if TEST_REPLAY:
+            if TEST_REPLAY: #REPLAY → resend previous message with same seq no.
                 if seq > 1:
                     seq = 1
             else:

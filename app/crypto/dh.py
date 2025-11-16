@@ -1,4 +1,3 @@
-# app/crypto/dh.py
 import os, hashlib
 
 P_HEX = (
